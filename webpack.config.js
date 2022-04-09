@@ -7,6 +7,7 @@ module.exports = {
     filename: "main.js"
   },
   devServer: {
+    //....//
     static: {                               
       directory: path.join(__dirname, './'),  
       watch: true

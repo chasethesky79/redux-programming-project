@@ -1,1 +1,1 @@
-console.log('Welcome to redux programming!!');
+console.log('Welcome to redux programming');

@@ -1,14 +1,12 @@
 {
-  "name": "getting-started-with-reduxx",
+  "name": "gettting-started-with-redux-ch01",
   "version": "1.0.0",
-  "description": "Getting started with redux",
-  "main": "src/app/app.js",
+  "description": "Getting Started With Redux",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
     "build": "webpack"
   },
-  "author": "Bharath Seshadri",
+  "author": "Suresh KUMAR Mukhiya",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.17.9",

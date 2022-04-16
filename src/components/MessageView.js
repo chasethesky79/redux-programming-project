@@ -10,9 +10,11 @@ class MessageView extends React.PureComponent {
         return (
           <div>
             <h1>Message View</h1>
-            <div style={listView}>
-                {messages && <ul style={{listStyle: 'none' }}>{messages.map((message, index) => <li onClick={() => handleMessageClick(index)} style={{ margin: '10px 0' }} key={index}>{message}</li>)}</ul>}
-            </div>
+            {messages.length > 0 && <div style={listView}>
+                {messages.map((message, index) => <div onClick={() => handleMessageClick(message.id)} style={{ margin: '10px 0' }} key={index}>
+                    <span>{message.text}@{message.timestamp}</span>
+                </div>)}
+            </div>}
           </div>
         )
     }

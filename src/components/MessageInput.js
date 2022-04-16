@@ -16,7 +16,8 @@ class MessageInput extends React.PureComponent {
             component="form"
             sx={{
             border: '1px solid black',
-            '& > :not(style)': { m: 1, width: '25ch' }
+            '& > :not(style)': { m: 1, width: '25ch' },
+            marginTop: '10px'
             }}
             noValidate
             autoComplete="off"

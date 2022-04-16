@@ -8,7 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 function reducer(state, action) {
   switch(action.type) {
     case 'ADD_MESSAGE':
-      return { ...state, messages: [...state.messages, { id: uuidv4(), timestamp: Date.now(), message: action.text }]};
+      return { ...state, messages: [...state.messages, { id: uuidv4(), timestamp: Date.now(), text: action.text }]};
     case 'DELETE_MESSAGE': {
       const { messages } = state;
       return { ...state, messages: messages.filter(message => message.id !== action.id )};
@@ -34,7 +34,7 @@ class App extends React.PureComponent {
       const handleMessageClick = (id) => store.dispatch({ type: 'DELETE_MESSAGE', id });
       return (
       <div>
-        <MessageView handleMessageClick={handleMessageClick} messages={messages}/>
+        { messages && <MessageView handleMessageClick={handleMessageClick} messages={messages}/>}
         <MessageInput handleFormSubmit={handleFormSubmit}/>
       </div>
     )

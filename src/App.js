@@ -1,36 +1,18 @@
 import React from 'react';
 
+import { createStore } from 'redux';
 import MessageView from './components/MessageView';
 import MessageInput from './components/MessageInput';
-
-function createStore(reducer, initialState) {
-  let state = initialState;
-  let listeners = [];
-
-  const getState = () => (state);
-
-  const dispatch = (action) => {
-    state = reducer(state, action);
-    listeners.forEach(cb => cb());
-  };
-
-  const subscribe = (cb) => {
-    listeners = [...listeners, cb]
-  }
-
-  return {
-    getState,
-    dispatch,
-    subscribe
-  };
-}
+import {v4 as uuidv4} from 'uuid';
 
 function reducer(state, action) {
   switch(action.type) {
     case 'ADD_MESSAGE':
-      return { ...state, messages: [...state.messages, action.message]};
-    case 'DELETE_MESSAGE':
-      return { ...state, messages: [...state.messages.slice(0, action.index), ...state.messages.slice(action.index + 1, state.messages.length)]};
+      return { ...state, messages: [...state.messages, { id: uuidv4(), timestamp: Date.now(), message: action.text }]};
+    case 'DELETE_MESSAGE': {
+      const { messages } = state;
+      return { ...state, messages: messages.filter(message => message.id !== action.id )};
+    }
     default:
       return state;
   }
@@ -40,12 +22,7 @@ const initialState = {
   messages: []
 };
 
-const store = createStore(reducer, initialState)
-store.dispatch({ type: 'ADD_MESSAGE', message: 'How does it look Neil?' });
-store.dispatch({ type: 'ADD_MESSAGE', message: 'Looking good' });
-store.dispatch({ type: 'ADD_MESSAGE', message: 'Nice day' });
-store.dispatch({ type: 'ADD_MESSAGE', message: 'Beautiful day' });
-store.dispatch({ type: 'DELETE_MESSAGE', index: 2 });
+const store = createStore(reducer, initialState);
 
 class App extends React.PureComponent {
   componentDidMount() {
@@ -53,8 +30,8 @@ class App extends React.PureComponent {
   }
   render() {
       const { messages } = store.getState();
-      const handleFormSubmit = (message) => store.dispatch({ type: 'ADD_MESSAGE', message });
-      const handleMessageClick = (index) => store.dispatch({ type: 'DELETE_MESSAGE', index });
+      const handleFormSubmit = (text) => store.dispatch({ type: 'ADD_MESSAGE', text });
+      const handleMessageClick = (id) => store.dispatch({ type: 'DELETE_MESSAGE', id });
       return (
       <div>
         <MessageView handleMessageClick={handleMessageClick} messages={messages}/>

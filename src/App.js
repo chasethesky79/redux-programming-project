@@ -19,7 +19,25 @@ function reducer(state, action) {
 }
 
 const initialState = {
-  messages: []
+  activeThreadId: '1-fca2',
+  threads: [
+     {
+       id: '1-fca2',
+       title: 'Buzz Aldrin',
+       messages: [
+         {
+           text: 'Twelve minutes to ignition',
+           timestamp: Date.now(),
+           id: uuidv4()
+         }
+       ]
+     },
+     {
+       id: '2-be91',
+       title: 'Michael Collins',
+       messages: []
+     }
+  ]
 };
 
 const store = createStore(reducer, initialState);
@@ -34,7 +52,7 @@ class App extends React.PureComponent {
       const handleMessageClick = (id) => store.dispatch({ type: 'DELETE_MESSAGE', id });
       return (
       <div>
-        { messages && <MessageView handleMessageClick={handleMessageClick} messages={messages}/>}
+        <MessageView handleMessageClick={handleMessageClick} messages={messages}/>
         <MessageInput handleFormSubmit={handleFormSubmit}/>
       </div>
     )

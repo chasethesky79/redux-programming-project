@@ -3,6 +3,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import {v4 as uuidv4} from 'uuid';
 import Thread from '../src/components/Thread';
+import ThreadTabs from '../src/components/ThreadTabs';
 
 function reducer(state, action) {
   switch(action.type) {
@@ -48,7 +49,12 @@ class App extends React.PureComponent {
   render() {
       const { activeThreadId, threads } = store.getState();
       const activeThread = threads.find(thread => thread.id === activeThreadId);
-      return <Thread thread={activeThread}/>
+      const tabs = threads.map(({ title, id }) => ({ title, active: id === activeThreadId }));
+      return (
+        <div className='ui segment'>
+          <ThreadTabs tabs={tabs}/>
+          <Thread thread={activeThread}/>
+        </div>)
   }
 }
 

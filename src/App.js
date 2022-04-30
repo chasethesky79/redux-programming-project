@@ -6,12 +6,17 @@ import Thread from '../src/components/Thread';
 import ThreadTabs from '../src/components/ThreadTabs';
 
 function reducer(state, action) {
+  const { threadId, text } = action;
   switch(action.type) {
-    case 'ADD_MESSAGE':
-      return { ...state, messages: [...state.messages, { id: uuidv4(), timestamp: Date.now(), text: action.text }]};
+    case 'ADD_MESSAGE': {
+      return { ...state, threads: state.threads.map(thread => thread.id === threadId 
+        ? { ...thread, messages: [...thread.messages, { id: uuidv4(), timestamp: Date.now(), text }]}
+        : thread)};
+    }
     case 'DELETE_MESSAGE': {
-      const { messages } = state;
-      return { ...state, messages: messages.filter(message => message.id !== action.id )};
+      return { ...state, threads: state.threads.map(thread => thread.id === threadId 
+        ? { ...thread, messages: thread.messages.filter(message => message.text !== text) }
+        : thread)};
     }
     default:
       return state;
@@ -47,13 +52,19 @@ class App extends React.PureComponent {
     store.subscribe(() => this.forceUpdate())
   }
   render() {
+      const handleFormSubmit = (threadId, text) => {
+        store.dispatch({ type: 'ADD_MESSAGE', threadId, text });
+      }
+      const handleMessageClick = (threadId, text) => {
+        store.dispatch({ type: 'DELETE_MESSAGE', threadId, text });
+      }
       const { activeThreadId, threads } = store.getState();
       const activeThread = threads.find(thread => thread.id === activeThreadId);
       const tabs = threads.map(({ title, id }) => ({ title, active: id === activeThreadId }));
       return (
         <div className='ui segment'>
           <ThreadTabs tabs={tabs}/>
-          <Thread thread={activeThread}/>
+          <Thread thread={activeThread} handleFormSubmit={handleFormSubmit} handleMessageClick={handleMessageClick}/>
         </div>)
   }
 }

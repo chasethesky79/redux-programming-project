@@ -9,7 +9,7 @@ class MessageInput extends React.PureComponent {
         message: ''
     }
     render() {
-    const { handleFormSubmit } = this.props;
+    const { handleMessageInput } = this.props;
     const { message } = this.state;
     return (
         <Box
@@ -23,7 +23,7 @@ class MessageInput extends React.PureComponent {
         >
             <TextField value={message} onChange={(evt) => this.setState({ message: evt.target.value })} id="outlined-basic" label="Outlined" variant="outlined" />
             <Button variant="contained" onClick={() => { 
-                handleFormSubmit(message);
+                handleMessageInput(message);
                 this.setState({ message: '' });
             }}>Submit</Button>
         </Box>

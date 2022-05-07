@@ -18,6 +18,9 @@ function reducer(state, action) {
         ? { ...thread, messages: thread.messages.filter(message => message.text !== text) }
         : thread)};
     }
+    case 'OPEN_THREAD': {
+      return { ...state, activeThreadId: threadId }
+    }
     default:
       return state;
   }
@@ -52,18 +55,15 @@ class App extends React.PureComponent {
     store.subscribe(() => this.forceUpdate())
   }
   render() {
-      const handleFormSubmit = (threadId, text) => {
-        store.dispatch({ type: 'ADD_MESSAGE', threadId, text });
-      }
-      const handleMessageClick = (threadId, text) => {
-        store.dispatch({ type: 'DELETE_MESSAGE', threadId, text });
-      }
+      const handleFormSubmit = (threadId, text) => store.dispatch({ type: 'ADD_MESSAGE', threadId, text });
+      const handleMessageClick = (threadId, text) => store.dispatch({ type: 'DELETE_MESSAGE', threadId, text });
+      const handleTabClick = (threadId) => store.dispatch({ type: 'OPEN_THREAD', threadId });
       const { activeThreadId, threads } = store.getState();
       const activeThread = threads.find(thread => thread.id === activeThreadId);
-      const tabs = threads.map(({ title, id }) => ({ title, active: id === activeThreadId }));
+      const tabs = threads.map(({ title, id }) => ({ title, active: id === activeThreadId, id }));
       return (
         <div className='ui segment'>
-          <ThreadTabs tabs={tabs}/>
+          <ThreadTabs tabs={tabs} handleTabClick={handleTabClick}/>
           <Thread thread={activeThread} handleFormSubmit={handleFormSubmit} handleMessageClick={handleMessageClick}/>
         </div>)
   }
